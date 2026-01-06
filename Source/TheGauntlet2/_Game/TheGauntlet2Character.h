@@ -85,12 +85,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
-public:
-
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+	//CUSTOM
+	UFUNCTION(BlueprintCallable, Category="Interact")
+	virtual void Interact();
+	
+	TArray<FOverlapResult> TryInteract();
+	
+	UPROPERTY(EditAnywhere, Category = "Interact")
+	float interactionRange;
 };
 

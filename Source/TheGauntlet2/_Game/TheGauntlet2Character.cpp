@@ -10,7 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Interactable.h"
 #include "TheGauntlet2.h"
+#include "Engine/OverlapResult.h"
 
 ATheGauntlet2Character::ATheGauntlet2Character()
 {
@@ -130,4 +132,54 @@ void ATheGauntlet2Character::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void ATheGauntlet2Character::Interact()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, "Interacting");
+	
+	TArray<FOverlapResult> list = TryInteract();
+
+	for (const FOverlapResult& Result : list)
+	{
+		//Result.GetActor() restituisce l'attore coinvolto
+		AActor* OverlappedActor = Result.GetActor();
+		
+		if (OverlappedActor && OverlappedActor->Implements<UInteractable>()) 
+		{
+			IInteractable::Execute_Interact(OverlappedActor);
+			break;
+		}
+	}
+}
+
+TArray<FOverlapResult> ATheGauntlet2Character::TryInteract()
+{
+	FVector StartLocation = GetActorLocation();
+    
+	// Creiamo la forma della sfera
+	FCollisionShape MySphere = FCollisionShape::MakeSphere(interactionRange);
+
+	// Array per contenere tutti i risultati
+	TArray<FOverlapResult> OverlapResults;
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this); // Ignora il player
+
+	// Eseguiamo l'Overlap
+	// Restituisce true se ha trovato qualcosa
+	bool bHit = GetWorld()->OverlapMultiByChannel(
+		OverlapResults,
+		StartLocation,
+		FQuat::Identity, // Nessuna rotazione
+		ECC_Visibility,  // Canale Visibility
+		MySphere,
+		QueryParams
+	);
+
+	// DEBUG VISIVO
+	DrawDebugSphere(GetWorld(), StartLocation, interactionRange, 12, bHit ? FColor::Green : FColor::Red, false, 2.0f);
+
+	// FHitResult "finto" da restituire (per mantenere compatibilità col tuo codice esistente)
+	return OverlapResults;
 }
