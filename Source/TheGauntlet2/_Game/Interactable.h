@@ -22,6 +22,18 @@ class THEGAUNTLET2_API IInteractable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, Category="Interaction")
-	void Interact();
+	// general version to call in c++
+	void Interact() { NativeInteract(); }
+
+	// activate to implement in c++
+	virtual void NativeInteract()
+	{
+		UObject* Object = Cast<UObject>(this);
+		Execute_BP_Interact(Object);
+	}
+
+	// ===== Functions to implement =====
+	// activate to implement in blueprint
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Interactable")
+	void BP_Interact();
 };

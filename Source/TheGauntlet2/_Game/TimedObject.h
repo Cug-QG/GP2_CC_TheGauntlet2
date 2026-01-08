@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "OrderReceiver.h"
 #include "GameFramework/Actor.h"
-#include "PlatformsHandler.generated.h"
+#include "TimedObject.generated.h"
 
 UCLASS()
-class THEGAUNTLET2_API APlatformsHandler : public AActor, public IOrderReceiver
+class THEGAUNTLET2_API ATimedObject : public AActor, public IOrderReceiver
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlatformsHandler();
+	ATimedObject();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,9 +23,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
-	float RotationSpeed = 40;
 	
 	virtual void NativeReact(float ActivationTime) override;
 	

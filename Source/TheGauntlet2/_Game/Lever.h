@@ -25,8 +25,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	void Interact_Implementation();
+	virtual void NativeInteract() override;
 
 	UPROPERTY(EditInstanceOnly, Category = "Config")
 	TArray<TScriptInterface<IOrderReceiver>> TargetReceivers;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	float activationTime = 5;
 };

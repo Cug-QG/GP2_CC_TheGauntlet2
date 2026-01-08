@@ -2,6 +2,7 @@
 
 
 #include "_Game/Lever.h"
+#include "OrderReceiver.h"
 
 // Sets default values
 ALever::ALever()
@@ -25,10 +26,19 @@ void ALever::Tick(float DeltaTime)
 
 }
 
-void ALever::Interact_Implementation()
+void ALever::NativeInteract()
 {
-	IInteractable::Interact_Implementation();
+	IInteractable::NativeInteract();
 	
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, "Being Interacted");
+
+	for (auto Element : TargetReceivers)
+	{
+		if (IsValid(Element.GetObject()))
+		{
+			TScriptInterface<IOrderReceiver> Target = Element.GetObject();
+			Target->React(activationTime);
+		}
+	}
 }
 

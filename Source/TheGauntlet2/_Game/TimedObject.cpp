@@ -1,37 +1,34 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "_Game/PlatformsHandler.h"
+#include "_Game/TimedObject.h"
 
 // Sets default values
-APlatformsHandler::APlatformsHandler()
+ATimedObject::ATimedObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = false;
+
 }
 
 // Called when the game starts or when spawned
-void APlatformsHandler::BeginPlay()
+void ATimedObject::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void APlatformsHandler::Tick(float DeltaTime)
+void ATimedObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FRotator NewRotation = FRotator(0.f, RotationSpeed * DeltaTime, 0.f);
-	AddActorLocalRotation(NewRotation);
 }
-
-void APlatformsHandler::NativeReact(float ActivationTime)
+void ATimedObject::NativeReact(float ActivationTime)
 {
 	IOrderReceiver::NativeReact(ActivationTime);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, "Reacting");
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Black, "Opening");
 	
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 
@@ -46,19 +43,25 @@ void APlatformsHandler::NativeReact(float ActivationTime)
 	TimerManager.SetTimer(
 		TimerHandle_Activation,
 		this,
-		&APlatformsHandler::Deactivate,
+		&ATimedObject::Deactivate,
 		ActivationTime,
 		false
 	);
 }
 
-void APlatformsHandler::Activate()
+void ATimedObject::Activate()
 {
-	SetActorTickEnabled(true);
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Black, "Opened");
+	
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
 }
 
-void APlatformsHandler::Deactivate()
+void ATimedObject::Deactivate()
 {
-	SetActorTickEnabled(false);
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Black, "Closed");
+	
+	SetActorEnableCollision(true);
+	SetActorHiddenInGame(false);
 }
 

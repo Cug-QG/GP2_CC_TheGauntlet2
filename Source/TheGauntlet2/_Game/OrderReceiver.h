@@ -22,6 +22,17 @@ class THEGAUNTLET2_API IOrderReceiver
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, Category="Reaction")
-	void React();
+	void React(float ActivationTime) { NativeReact(ActivationTime); }
+
+	// activate to implement in c++
+	virtual void NativeReact(float ActivationTime)
+	{
+		UObject* Object = Cast<UObject>(this);
+		Execute_BP_React(Object, ActivationTime);
+	}
+
+	// ===== Functions to implement =====
+	// activate to implement in blueprint
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Reaction")
+	void BP_React(float ActivationTime);
 };

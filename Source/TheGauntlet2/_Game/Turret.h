@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "OrderReceiver.h"
 #include "GameFramework/Actor.h"
-#include "PlatformsHandler.generated.h"
+#include "Turret.generated.h"
 
 UCLASS()
-class THEGAUNTLET2_API APlatformsHandler : public AActor, public IOrderReceiver
+class THEGAUNTLET2_API ATurret : public AActor, public IOrderReceiver
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlatformsHandler();
+	ATurret();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,8 +24,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
-	float RotationSpeed = 40;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Config")
+	float Range = 1500.0f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Config")
+	float FireRate = 1.0f;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Config")
+	AActor* PlayerTarget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	USceneComponent* FirePoint;
+	
+	void Shoot();
+	
+	void Cooldown(float delta);
+	
+	float CooldownTime;
+	
+	bool CanSeePlayer();
 	
 	virtual void NativeReact(float ActivationTime) override;
 	
