@@ -35,7 +35,6 @@ void APlatformsHandler::NativeReact(float ActivationTime)
 	
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 
-	// Se c'� gi� un timer attivo (es. il giocatore ha premuto due volte), lo puliamo
 	if (TimerManager.IsTimerActive(TimerHandle_Activation))
 	{
 		TimerManager.ClearTimer(TimerHandle_Activation);

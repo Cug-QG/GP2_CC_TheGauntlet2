@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Interactable.h"
-#include "OrderReceiver.h"
+#include "TheGauntlet2Character.h"
 #include "GameFramework/Actor.h"
-#include "Lever.generated.h"
+#include "TG2Key.generated.h"
 
 UCLASS()
-class THEGAUNTLET2_API ALever : public AActor, public IInteractable
+class THEGAUNTLET2_API ATG2Key : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ALever();
+	ATG2Key();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,10 +26,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	virtual void NativeInteract(AActor* Interactor) override;
-
-	UPROPERTY(EditInstanceOnly, Category = "Config")
-	TArray<TScriptInterface<IOrderReceiver>> TargetReceivers;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	float activationTime = 5;
+	void AttachToSocket(ATheGauntlet2Character* Character);
 };

@@ -148,7 +148,7 @@ void ATheGauntlet2Character::Interact()
 		if (OverlappedActor && OverlappedActor->Implements<UInteractable>()) 
 		{
 			TScriptInterface<IInteractable> Interactable = OverlappedActor;
-			Interactable->Interact();
+			Interactable->Interact(this);
 			break;
 		}
 	}

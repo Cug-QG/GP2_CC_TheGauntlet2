@@ -99,5 +99,8 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Interact")
 	float interactionRange;
+	
+	UPROPERTY(EditAnywhere, Category = "Interact")
+	bool hasKey = false;
 };
 

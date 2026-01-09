@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Interactable.h"
-#include "OrderReceiver.h"
 #include "GameFramework/Actor.h"
-#include "Lever.generated.h"
+#include "TG2Exit.generated.h"
 
 UCLASS()
-class THEGAUNTLET2_API ALever : public AActor, public IInteractable
+class THEGAUNTLET2_API ATG2Exit : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ALever();
+	ATG2Exit();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,12 +23,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	virtual void NativeInteract(AActor* Interactor) override;
 
-	UPROPERTY(EditInstanceOnly, Category = "Config")
-	TArray<TScriptInterface<IOrderReceiver>> TargetReceivers;
+	virtual void NativeInteract(AActor* Interactor) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	float activationTime = 5;
+	void Open();
 };
