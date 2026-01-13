@@ -18,6 +18,10 @@ void ATG2Exit::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Mesh = FindComponentByClass<UStaticMeshComponent>();
+	BasicDynamicMaterial = UMaterialInstanceDynamic::Create(BasicMaterial, this);
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
+	ActivateDynamicMaterial = UMaterialInstanceDynamic::Create(ActivateMaterial, this);
 }
 
 // Called every frame
@@ -39,5 +43,6 @@ void ATG2Exit::NativeInteract(AActor* Interactor)
 void ATG2Exit::Open()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::White, "Exit opened");
+	Mesh->SetMaterial(0, ActivateMaterial);
 }
 

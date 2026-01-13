@@ -28,4 +28,17 @@ public:
 	virtual void NativeInteract(AActor* Interactor) override;
 	
 	void AttachToSocket(ATheGauntlet2Character* Character);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* BasicMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* ActivateMaterial;
+
+	UMaterialInstanceDynamic* BasicDynamicMaterial;
+	
+	UMaterialInstanceDynamic* ActivateDynamicMaterial;
 };

@@ -13,6 +13,7 @@
 #include "Interactable.h"
 #include "TheGauntlet2.h"
 #include "Engine/OverlapResult.h"
+#include "ObjectPooling/ObjectPoolSubsystem.h"
 
 ATheGauntlet2Character::ATheGauntlet2Character()
 {
@@ -50,6 +51,11 @@ ATheGauntlet2Character::ATheGauntlet2Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void ATheGauntlet2Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ATheGauntlet2Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -183,4 +189,38 @@ TArray<FOverlapResult> ATheGauntlet2Character::TryInteract()
 
 	// FHitResult "finto" da restituire (per mantenere compatibilità col tuo codice esistente)
 	return OverlapResults;
+}
+
+void ATheGauntlet2Character::PrintPool()
+{
+	if (!GEngine) return;
+
+	int32 KeyIndex = 500;
+
+	for (const auto& Pair : ObjectPoolSubsystem->ObjectPoolMap)
+	{
+		TSubclassOf<AActor> ClassKey = Pair.Key;
+		const FObjectPool& PoolData = Pair.Value;
+
+		int32 ActiveCount = PoolData.ActivePoolingObjects.Num();
+		int32 FreeCount = PoolData.UsablePoolingObjects.Num();
+		int32 TotalCount = ActiveCount + FreeCount;
+        
+		FString Msg = FString::Printf(TEXT("Classe: %s || Attivi: %d || Pullabili: %d || Totale: %d"), 
+			*ClassKey->GetName(), 
+			ActiveCount, 
+			FreeCount, 
+			TotalCount
+		);
+		
+		GEngine->AddOnScreenDebugMessage(
+			KeyIndex, 
+			0.0f, 
+			FColor::Cyan, 
+			Msg
+		);
+
+		// Incrementiamo la Key per la prossima classe nella mappa (così ognuna ha la sua riga)
+		KeyIndex++;
+	}
 }

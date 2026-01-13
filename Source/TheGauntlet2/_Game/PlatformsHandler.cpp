@@ -16,6 +16,9 @@ void APlatformsHandler::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BasicDynamicMaterial = UMaterialInstanceDynamic::Create(BasicMaterial, this);
+	ChangeMaterials(BasicDynamicMaterial);
+	ActivateDynamicMaterial = UMaterialInstanceDynamic::Create(ActivateMaterial, this);
 }
 
 // Called every frame
@@ -54,10 +57,20 @@ void APlatformsHandler::NativeReact(float ActivationTime)
 void APlatformsHandler::Activate()
 {
 	SetActorTickEnabled(true);
+	ChangeMaterials(ActivateDynamicMaterial);
 }
 
 void APlatformsHandler::Deactivate()
 {
 	SetActorTickEnabled(false);
+	ChangeMaterials(BasicDynamicMaterial);
+}
+
+void APlatformsHandler::ChangeMaterials(UMaterialInstanceDynamic* material)
+{
+	for (auto Element :  Platforms)
+	{
+		Element->FindComponentByClass<UStaticMeshComponent>()->SetMaterial(0, material);
+	}
 }
 

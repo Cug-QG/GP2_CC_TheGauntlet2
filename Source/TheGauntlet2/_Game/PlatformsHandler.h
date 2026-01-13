@@ -24,7 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	float RotationSpeed = 40;
 	
 	virtual void NativeReact(float ActivationTime) override;
@@ -34,4 +34,19 @@ public:
 	void Activate();
 	
 	void Deactivate();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	TArray<AActor*> Platforms;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* BasicMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* ActivateMaterial;
+
+	UMaterialInstanceDynamic* BasicDynamicMaterial;
+	
+	UMaterialInstanceDynamic* ActivateDynamicMaterial;
+	
+	void ChangeMaterials(UMaterialInstanceDynamic* material);
 };

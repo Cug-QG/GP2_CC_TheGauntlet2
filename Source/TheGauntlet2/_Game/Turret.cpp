@@ -4,6 +4,8 @@
 #include "_Game/Turret.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "ObjectPooling/ObjectPoolInterface.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -18,6 +20,12 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 	PlayerTarget = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	PoolSubsystem = GetWorld()->GetSubsystem<UObjectPoolSubsystem>();
+	PoolSubsystem->AddPool(projectile, 10);
+	Mesh = FindComponentByClass<UStaticMeshComponent>();
+	BasicDynamicMaterial = UMaterialInstanceDynamic::Create(BasicMaterial, this);
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
+	ActivateDynamicMaterial = UMaterialInstanceDynamic::Create(ActivateMaterial, this);
 }
 
 // Called every frame
@@ -30,16 +38,33 @@ void ATurret::Tick(float DeltaTime)
 
 void ATurret::Shoot()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, "Shoot");
-	
 	CooldownTime = 0.0f;
+	
+	FObjectPoolActivationData data;
+	data.ObjectPoolTransform = this->GetTransform();
+	data.ObjectPoolTransform.SetRotation(FirePoint->GetRelativeRotation().Quaternion());
+	data.ObjectPoolName = projectileName;
+	TScriptInterface<IObjectPoolInterface> diskInstance = PoolSubsystem->GetObjectFromPool(projectile);
+	if (!diskInstance) return;
+	diskInstance.GetInterface()->Activate(data);
 }
 
 void ATurret::Cooldown(float delta)
 {
 	if (CooldownTime >= 1/FireRate)
 	{
-		if (CanSeePlayer()) Shoot();
+		if (CanSeePlayer())
+		{
+			FVector StartLocation = FirePoint->GetComponentLocation();
+			FVector TargetLocation = PlayerTarget->GetActorLocation();
+			
+			// 2. Calcola la rotazione necessaria
+			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, TargetLocation);
+			
+			// 3. Applica la rotazione (puoi scegliere se applicarla istantaneamente)
+			FirePoint->SetWorldRotation(LookAtRotation);
+			Shoot();
+		}
 		return;
 	}
 	CooldownTime += delta;
@@ -61,7 +86,7 @@ bool ATurret::CanSeePlayer()
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, QueryParams);
 
-	FColor LineColor = bHit && Hit.GetActor() == PlayerTarget ? FColor::Red : FColor::Green;
+	FColor LineColor = bHit && Hit.GetActor() == PlayerTarget ? FColor::Green : FColor::Red;
 
 	DrawDebugLine(
 		GetWorld(), 
@@ -114,12 +139,14 @@ void ATurret::Activate()
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, "Activate");
 	
 	SetActorTickEnabled(true);
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
 }
 
 void ATurret::Deactivate()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, "Deactivate");
 	
+	Mesh->SetMaterial(0, ActivateDynamicMaterial);
 	SetActorTickEnabled(false);
 }
 

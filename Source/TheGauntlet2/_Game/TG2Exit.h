@@ -27,4 +27,17 @@ public:
 	virtual void NativeInteract(AActor* Interactor) override;
 	
 	void Open();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* BasicMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* ActivateMaterial;
+
+	UMaterialInstanceDynamic* BasicDynamicMaterial;
+	
+	UMaterialInstanceDynamic* ActivateDynamicMaterial;
 };

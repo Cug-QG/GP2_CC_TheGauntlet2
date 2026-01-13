@@ -18,6 +18,10 @@ void ATG2Key::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Mesh = FindComponentByClass<UStaticMeshComponent>();
+	BasicDynamicMaterial = UMaterialInstanceDynamic::Create(BasicMaterial, this);
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
+	ActivateDynamicMaterial = UMaterialInstanceDynamic::Create(ActivateMaterial, this);
 }
 
 // Called every frame
@@ -37,6 +41,7 @@ void ATG2Key::NativeInteract(AActor* Interactor)
 	Character->hasKey = true;
 	
 	AttachToSocket(Character);
+	Mesh->SetMaterial(0, ActivateMaterial);
 }
 
 void ATG2Key::AttachToSocket(ATheGauntlet2Character* Character)

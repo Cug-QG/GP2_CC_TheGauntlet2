@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "OrderReceiver.h"
 #include "GameFramework/Actor.h"
+#include "ObjectPooling/ObjectPoolSubsystem.h"
 #include "Turret.generated.h"
 
 UCLASS()
@@ -51,4 +52,25 @@ public:
 	void Activate();
 	
 	void Deactivate();
+	
+	UObjectPoolSubsystem* PoolSubsystem;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Pool")
+	TSubclassOf<AActor> projectile;
+	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category="Pool")
+	FName projectileName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* BasicMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	UMaterialInterface* ActivateMaterial;
+
+	UMaterialInstanceDynamic* BasicDynamicMaterial;
+	
+	UMaterialInstanceDynamic* ActivateDynamicMaterial;
 };

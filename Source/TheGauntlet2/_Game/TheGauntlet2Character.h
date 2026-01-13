@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "ObjectPooling/ObjectPoolSubsystem.h"
 #include "TheGauntlet2Character.generated.h"
 
 class USpringArmComponent;
@@ -58,6 +59,8 @@ protected:
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 
@@ -100,7 +103,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Interact")
 	float interactionRange;
 	
-	UPROPERTY(EditAnywhere, Category = "Interact")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interact")
 	bool hasKey = false;
+	
+	UFUNCTION(BlueprintCallable, Category = "Interact")
+	void PrintPool();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+	UObjectPoolSubsystem* ObjectPoolSubsystem;
 };
 

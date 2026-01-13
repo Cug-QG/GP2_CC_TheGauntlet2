@@ -16,7 +16,10 @@ ALever::ALever()
 void ALever::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Mesh = FindComponentByClass<UStaticMeshComponent>();
+	BasicDynamicMaterial = UMaterialInstanceDynamic::Create(BasicMaterial, this);
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
+	ActivateDynamicMaterial = UMaterialInstanceDynamic::Create(ActivateMaterial, this);
 }
 
 // Called every frame
@@ -37,8 +40,30 @@ void ALever::NativeInteract(AActor* Interactor)
 		if (IsValid(Element.GetObject()))
 		{
 			TScriptInterface<IOrderReceiver> Target = Element.GetObject();
-			Target->React(activationTime);
+			Target->React(ActivationTime);
 		}
 	}
+	
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+
+	if (TimerManager.IsTimerActive(TimerHandle_Activation))
+	{
+		TimerManager.ClearTimer(TimerHandle_Activation);
+	}
+
+	Mesh->SetMaterial(0, ActivateMaterial);
+	
+	TimerManager.SetTimer(
+		TimerHandle_Activation,
+		this,
+		&ALever::ResetMaterial,
+		ActivationTime,
+		false
+	);
+}
+
+void ALever::ResetMaterial()
+{
+	Mesh->SetMaterial(0, BasicDynamicMaterial);
 }
 
