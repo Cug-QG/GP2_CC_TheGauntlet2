@@ -35,4 +35,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PoolableObjectData")
 	float speed = 1000;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PoolableObjectData")
+	float damage = 10;
 };

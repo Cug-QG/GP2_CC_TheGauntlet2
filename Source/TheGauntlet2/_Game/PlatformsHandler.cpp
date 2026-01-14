@@ -70,7 +70,9 @@ void APlatformsHandler::ChangeMaterials(UMaterialInstanceDynamic* material)
 {
 	for (auto Element :  Platforms)
 	{
-		Element->FindComponentByClass<UStaticMeshComponent>()->SetMaterial(0, material);
+		if (!IsValid(Element)) return;
+		UStaticMeshComponent* mesh = Element->FindComponentByClass<UStaticMeshComponent>();
+		if (IsValid(mesh) && IsValid(material)) mesh->SetMaterial(0, material);
 	}
 }
 

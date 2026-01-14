@@ -18,7 +18,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "DamageData")
 	float speed = 1000;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "DamageData")
+	float damage = 10;
+	
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "FXData|Initialization")
 	float GetSpeed() const { return speed; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "FXData|Initialization")
+	float GetDamage() const { return damage; }
 };

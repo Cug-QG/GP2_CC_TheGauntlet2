@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HealthComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "ObjectPooling/ObjectPoolSubsystem.h"
@@ -111,5 +112,19 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
 	UObjectPoolSubsystem* ObjectPoolSubsystem;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UHealthComponent* HealthComp;
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void DoOnDeath();
+	
+	virtual void Landed(const FHitResult& Hit) override;
+	
+	UPROPERTY(EditAnywhere, Category = "Fall")
+	float minFallVelocity = 1000;
+	
+	UPROPERTY(EditAnywhere, Category = "Fall")
+	float fallDmgMultiplier = 0.1;
 };
 

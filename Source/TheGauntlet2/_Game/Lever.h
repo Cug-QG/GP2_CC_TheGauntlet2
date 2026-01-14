@@ -33,6 +33,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	float ActivationTime = 5;
 	
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category = "Config")
 	FTimerHandle TimerHandle_Activation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")

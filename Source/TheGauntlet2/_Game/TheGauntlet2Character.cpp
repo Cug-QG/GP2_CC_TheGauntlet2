@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TheGauntlet2Character.h"
+
+#include <string>
+
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -9,6 +12,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HealthComponent.h"
 #include "InputActionValue.h"
 #include "Interactable.h"
 #include "TheGauntlet2.h"
@@ -51,6 +55,9 @@ ATheGauntlet2Character::ATheGauntlet2Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComp"));
+	HealthComp->OnDeath.AddDynamic(this, &ATheGauntlet2Character::DoOnDeath);
 }
 
 void ATheGauntlet2Character::Tick(float DeltaTime)
@@ -222,5 +229,26 @@ void ATheGauntlet2Character::PrintPool()
 
 		// Incrementiamo la Key per la prossima classe nella mappa (così ognuna ha la sua riga)
 		KeyIndex++;
+	}
+}
+
+void ATheGauntlet2Character::DoOnDeath_Implementation()
+{
+}
+
+void ATheGauntlet2Character::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "Landed");
+	
+	float FallingSpeed = -GetVelocity().Z; 
+	
+	if (FallingSpeed > minFallVelocity)
+	{
+		float ExcessSpeed = FallingSpeed - minFallVelocity;
+		float DamageToApply = ExcessSpeed * fallDmgMultiplier;
+		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, std::to_string(DamageToApply).c_str());
+		HealthComp->HandleTakeDamage(DamageToApply);
 	}
 }

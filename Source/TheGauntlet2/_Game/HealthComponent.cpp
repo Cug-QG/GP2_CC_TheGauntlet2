@@ -10,6 +10,7 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	
 	// ...
 }
 
@@ -30,12 +31,11 @@ void UHealthComponent::HandleTakeDamage(float DamageAmount)
 	if(CurrentHealth <= 0) return;
 	
 	CurrentHealth -= DamageAmount;
-	//OnDamage.Broadcast();
+	OnDamage.Broadcast();
 	
 	if (CurrentHealth <= 0)
 	{
-		//OnDeath.Broadcast();
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Emerald, "Dead");
+		OnDeath.Broadcast();
 	}
 }
 

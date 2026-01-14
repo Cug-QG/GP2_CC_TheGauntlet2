@@ -31,7 +31,7 @@ void ALever::Tick(float DeltaTime)
 
 void ALever::NativeInteract(AActor* Interactor)
 {
-	IInteractable::NativeInteract(Interactor);
+	
 	
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, "Being Interacted");
 
@@ -60,6 +60,8 @@ void ALever::NativeInteract(AActor* Interactor)
 		ActivationTime,
 		false
 	);
+	
+	IInteractable::NativeInteract(Interactor);
 }
 
 void ALever::ResetMaterial()
