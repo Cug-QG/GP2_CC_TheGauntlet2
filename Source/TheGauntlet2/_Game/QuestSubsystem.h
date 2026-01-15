@@ -9,15 +9,15 @@
 /**
  * 
  */
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Abstract, Blueprintable, BlueprintType)
 class THEGAUNTLET2_API UQuestSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable, Category = "Subsystem")
-	void MyFunction();
-
 	// Un evento che puoi implementare nel Blueprint
-	UFUNCTION(BlueprintImplementableEvent, Category = "Subsystem")
-	void OnSomethingHappened();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Subsystem")
+	void CompleteQuest(FVector Position, FDataTableRowHandle QuestName);
+	
+	//UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "Subsystem")
+	virtual UWorld* GetWorld() const override;
 };
