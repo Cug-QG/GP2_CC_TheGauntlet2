@@ -14,7 +14,6 @@ class THEGAUNTLET2_API UQuestSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
-	// Un evento che puoi implementare nel Blueprint
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Subsystem")
 	void CompleteQuest(FVector Position, FDataTableRowHandle QuestName);
 	
